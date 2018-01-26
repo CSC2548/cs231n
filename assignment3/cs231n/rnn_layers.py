@@ -115,8 +115,20 @@ def rnn_forward(x, h0, Wx, Wh, b):
     # above. You can use a for loop to help compute the forward pass.            #
     ##############################################################################
     
-    T = x.shape[1] # T
+    N, T, H = x.shape
+    
+    inter_h_in = h0
+    inter_h_out = None
+    # print(h0.shape)
+    # print(T)
+    h = []
 
+    for i in range(T):
+        next_h, cache = rnn_step_forward(np.squeeze(x[:,i,:]), inter_h_in, Wx, Wh, b)
+        inter_h_in = next_h
+        h.append(inter_h_in)
+
+    h = np.swapaxes(np.array(h), 0, 1)
 
 
     ##############################################################################
